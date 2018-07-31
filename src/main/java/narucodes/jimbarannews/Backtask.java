@@ -90,7 +90,15 @@ public class Backtask extends AsyncTask<String, Void, JSONObject> {
                     Toast.makeText(context, "Periksa jaringan anda", Toast.LENGTH_LONG).show();
                 } else {
                     if (result.getInt("sukses") == 1) {
-                        if (result.getInt("status") == 1) {
+                        if (result.getInt("ID_role") == 1) {
+                            sharedPref.setLogin(true);
+                            sharedPref.setUserID(result.getInt("ID"));
+                            id = sharedPref.getUserID();
+                            Intent intent = new Intent(context, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
+                        }
+                     else if (result.getInt("ID_role") == 2) {
                             sharedPref.setLogin(true);
                             sharedPref.setUserID(result.getInt("ID"));
                             id = sharedPref.getUserID();
