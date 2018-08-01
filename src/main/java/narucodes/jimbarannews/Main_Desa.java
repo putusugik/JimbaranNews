@@ -1,6 +1,8 @@
 package narucodes.jimbarannews;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,6 +62,35 @@ public class Main_Desa extends android.support.v4.app.Fragment {
         return rootView;
     }
 
+    private Main_Pusat.OnFragmentInteractionListener mListener;
+
+    public void onButtonPressed (Uri uri){
+        if (mListener!=null){
+            mListener.onFragment(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Main_Pusat.OnFragmentInteractionListener){
+            mListener = (Main_Pusat.OnFragmentInteractionListener)context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + "must implement");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onFragment (Uri uri);
+    }
+
 
     private class loadPostdesa extends AsyncTask<String, String ,String> {
 
@@ -108,10 +139,10 @@ public class Main_Desa extends android.support.v4.app.Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             pDialog.dismiss();
-            if (desa_adapter != null){
+            /*if (desa_adapter != null){
                 desa_adapter.notifyDataSetChanged();
                 return;
-            }
+            }*/
             desa_adapter = new Desa_Adapter(getActivity(), desalist);
             lv.setAdapter(desa_adapter);
             lv.setEmptyView(getView().findViewById(R.id.empty_listdesa));

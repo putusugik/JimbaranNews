@@ -1,6 +1,8 @@
 package narucodes.jimbarannews;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +60,35 @@ public class Main_Pusat extends android.support.v4.app.Fragment {
         new loadPostpusat().execute();
 
         return rootView;
+    }
+
+    private OnFragmentInteractionListener mListener;
+
+    public void onButtonPressed (Uri uri){
+        if (mListener!=null){
+            mListener.onFragment(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener){
+            mListener = (OnFragmentInteractionListener)context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + "must implement");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onFragment (Uri uri);
     }
 
     private class loadPostpusat extends AsyncTask<String, String ,String> {

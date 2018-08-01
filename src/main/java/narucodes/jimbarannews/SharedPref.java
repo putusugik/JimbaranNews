@@ -12,6 +12,7 @@ public class SharedPref {
     private static final String PREF_NAME = "Jimbaran News";
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
     private static final String KEY_ID_USER = "idUser";
+    private static final String KEY_IS_LOGGEDINADMIN = "isLoggedInAdmin";
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -34,6 +35,15 @@ public class SharedPref {
 
     public boolean isLoggedIn() {
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
+    }
+
+    public void setLoginAdmin (boolean isLoggedInAdmin){
+        editor.putBoolean(KEY_IS_LOGGEDINADMIN, isLoggedInAdmin);
+        editor.commit();
+    }
+
+    public boolean isLoggedInAdmin (){
+        return pref.getBoolean(KEY_IS_LOGGEDINADMIN, false);
     }
 
     public void setUserID(int idUser)

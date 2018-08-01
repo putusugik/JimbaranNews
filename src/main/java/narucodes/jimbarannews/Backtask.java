@@ -17,6 +17,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import narucodes.jimbarannews.Admin.AdminDashboard;
 
 /**
  * Created by User on 7/30/2018.
@@ -99,10 +100,10 @@ public class Backtask extends AsyncTask<String, Void, JSONObject> {
                             context.startActivity(intent);
                         }
                      else if (result.getInt("ID_role") == 2) {
-                            sharedPref.setLogin(true);
+                            sharedPref.setLoginAdmin(true);
                             sharedPref.setUserID(result.getInt("ID"));
                             id = sharedPref.getUserID();
-                            Intent intent = new Intent(context, MainActivity.class);
+                            Intent intent = new Intent(context, AdminDashboard.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
                         }

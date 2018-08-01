@@ -24,6 +24,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import narucodes.jimbarannews.Admin.AdminDashboard;
 
 public class Login extends AppCompatActivity {
 
@@ -58,6 +59,11 @@ public class Login extends AppCompatActivity {
         if (sharedPref.isLoggedIn()) {
             new loadUser().execute();
             Intent intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (sharedPref.isLoggedInAdmin()){
+            new loadUser().execute();
+            Intent intent = new Intent(Login.this, AdminDashboard.class);
             startActivity(intent);
             finish();
         }
