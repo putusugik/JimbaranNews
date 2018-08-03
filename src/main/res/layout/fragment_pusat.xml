@@ -6,8 +6,10 @@
     android:layout_height="match_parent"
     tools:context="narucodes.jimbarannews.MainActivity">
 
+
     <ListView
         android:id="@+id/listpusat"
+        android:nestedScrollingEnabled="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -27,5 +29,6 @@
         android:layout_height="300dp"
         android:layout_gravity="center_vertical"
         />
+    <!--</ScrollView>-->
 
 </RelativeLayout>

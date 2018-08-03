@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="narucodes.jimbarannews.DetailPostPusat">
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:id="@+id/imgdetail"
+            android:src="@drawable/ic_jn"
+            android:layout_marginBottom="5dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="1dp"
+            android:id="@+id/juduldetail"
+            android:textStyle="bold"
+            android:textSize="8pt"
+            android:textAlignment="textStart"
+            android:text="JUDUL"
+            android:textColor="@color/dark_dark"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="inherit"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="1dp"
+            android:id="@+id/infodetail"
+            android:text="INFORMASI"
+            android:textSize="6pt"/>
+
+</LinearLayout>
+</ScrollView>

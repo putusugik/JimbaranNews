@@ -11,6 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import narucodes.jimbarannews.Admin.DeletePostDesa;
+import narucodes.jimbarannews.Admin.DeletePostPusat;
+
 public class MainActivity extends AppCompatActivity implements Main_Pusat.OnFragmentInteractionListener, Main_Desa.OnFragmentInteractionListener {
 
     /**
@@ -118,7 +121,16 @@ public class MainActivity extends AppCompatActivity implements Main_Pusat.OnFrag
         if (id == R.id.logout) {
             logoutUser();
             return true;
+        } else if (id == R.id.deletepusat) {
+            Intent i = new Intent(MainActivity.this, DeletePostPusat.class);
+            startActivity(i);
+            return true;
+        } else if (id == R.id.deletedesa) {
+            Intent i = new Intent(MainActivity.this, DeletePostDesa.class);
+            startActivity(i);
+            return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

@@ -8,22 +8,27 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import narucodes.jimbarannews.Admin.ImageLoader;
 
 /**
  * Created by User on 7/31/2018.
  */
 
-class Pusat_Adapter extends BaseAdapter implements Filterable {
+public class Pusat_Adapter extends BaseAdapter implements Filterable {
 
     private Activity activity;
     private ArrayList<HashMap<String,String>> data;
     private ArrayList<HashMap<String,String>> dataBackup;
     private static LayoutInflater inflater = null;
-    //public ImageLoader imageLoader;
+    public ImageLoader imageLoader;
     HashMap<String,String> histori = new HashMap<String, String>();
 
     public Pusat_Adapter (Activity a, ArrayList<HashMap<String, String>> d){
@@ -53,13 +58,20 @@ class Pusat_Adapter extends BaseAdapter implements Filterable {
         View v = view;
         if (view == null)
             v = inflater.inflate(R.layout.pusat_adapter, null);
+
             TextView t_judul = (TextView)v.findViewById(R.id.judulpusat);
             TextView t_info = (TextView)v.findViewById(R.id.infopusat);
+            TextView t_o = (TextView)v.findViewById(R.id.pusat);
+            ImageView img = (ImageView)v.findViewById(R.id.imgpus);
 
             histori = data.get(i);
 
             t_judul.setText(histori.get(Main_Pusat.TAG_JUDUL));
             t_info.setText(histori.get(Main_Pusat.TAG_INFO));
+            t_o.setText(histori.get(Main_Pusat.TAG_ID));
+            //Log.d("IMGPUSAT", histori.get(Main_Pusat.TAG_GAMBAR));
+            Picasso.with(activity.getApplicationContext()).load(histori.get(Main_Pusat.TAG_GAMBAR)).into(img);
+            //imageLoader.DisplayImage(histori.get(Main_Pusat.TAG_GAMBAR), img);
 
         return v;
 

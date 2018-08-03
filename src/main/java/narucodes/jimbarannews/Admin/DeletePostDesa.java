@@ -1,11 +1,12 @@
-package narucodes.jimbarannews;
+package narucodes.jimbarannews.Admin;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,16 +26,18 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import narucodes.jimbarannews.Desa_Adapter;
+import narucodes.jimbarannews.JSONParser;
+import narucodes.jimbarannews.Login;
+import narucodes.jimbarannews.R;
+import narucodes.jimbarannews.SharedPref;
 
-/**
- * Created by User on 7/31/2018.
- */
-
-public class Main_Desa extends android.support.v4.app.Fragment {
+public class DeletePostDesa extends Fragment {
 
     SharedPref sharedPref;
     JSONParser jsonParser = new JSONParser();
     private static String url_selectdesa = "http://sirent.esy.es/jimnews/select_postdesa.php";
+    private static String url_deletepost = "http://sirent.esy.es/jimnews/delete_postdesa.php";
     public static final String TAG_SUCCESS = "sukses";
     public static final String TAG_POST = "psdesa";
     public static final String TAG_ID = "ID";
@@ -45,34 +49,44 @@ public class Main_Desa extends android.support.v4.app.Fragment {
     private Desa_Adapter desa_adapter;
 
     int id;
+    String pID;
     ListView lv;
     JSONArray postdesa = null;
     ArrayList<HashMap<String, String>> desalist = new ArrayList<HashMap<String, String>>();
 
-    public Main_Desa(){
+    public DeletePostDesa(){
 
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_desa, container, false);
-        lv = (ListView) rootView.findViewById(R.id.listdesa);
-        lv.setDivider(getActivity().getDrawable(R.drawable.divider));
-        lv.setDividerHeight(2);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_delete_post, container, false);
+        lv = (ListView) rootView.findViewById(R.id.lsdel);
+        /*lv.setDivider(getActivity().getDrawable(R.drawable.divider));
+        lv.setDividerHeight(2);*/
 
-        new loadPostdesa().execute();
-
+        new loadAllPost().execute();
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String pID = ((TextView)view.findViewById(R.id.desa)).getText().toString();
-                String post = "desa";
-                Intent intent = new Intent(getActivity().getApplicationContext(), DetailPostPusat.class);
-                intent.putExtra("ID", pID);
-                intent.putExtra("post", post);
-                startActivityForResult(intent, 100);
+                pID = ((TextView)view.findViewById(R.id.desa)).getText().toString();
+                Toast.makeText(getActivity(), ""+pID, Toast.LENGTH_SHORT).show();
+                final AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
+                ad.setMessage("Hapus Postingan ini ?");
+                ad.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        new deletePost().execute();
+                    }
+                });
+                ad.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                AlertDialog alert = ad.create();
+                alert.show();
             }
         });
 
@@ -80,38 +94,7 @@ public class Main_Desa extends android.support.v4.app.Fragment {
         return rootView;
     }
 
-    private Main_Pusat.OnFragmentInteractionListener mListener;
-
-    public void onButtonPressed (Uri uri){
-        if (mListener!=null){
-            mListener.onFragment(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof Main_Pusat.OnFragmentInteractionListener){
-            mListener = (Main_Pusat.OnFragmentInteractionListener)context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + "must implement");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragment (Uri uri);
-    }
-
-
-    private class loadPostdesa extends AsyncTask<String, String ,String> {
-
+    private class loadAllPost extends AsyncTask<String, String, String> {
         ProgressDialog pDialog = new ProgressDialog(getActivity());
         @Override
         protected void onPreExecute() {
@@ -167,7 +150,41 @@ public class Main_Desa extends android.support.v4.app.Fragment {
             }*/
             desa_adapter = new Desa_Adapter(getActivity(), desalist);
             lv.setAdapter(desa_adapter);
-            lv.setEmptyView(getView().findViewById(R.id.empty_listdesa));
+
+        }
+    }
+
+    private class deletePost extends AsyncTask <String, String, String> {
+        ProgressDialog pDialog = new ProgressDialog(getActivity());
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog.setMessage("Deleting...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            String id = pID;
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("ID", ""+id));
+            JSONObject obj = jsonParser.makeHttpRequest(url_deletepost, "POST", params);
+            Log.d("DEL", obj.toString());
+
+            try{
+                int sukses = obj.getInt(TAG_SUCCESS);
+                if (sukses==1){
+                    Intent i = new Intent(getActivity(), Login.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    getActivity().finish();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
         }
     }
 }

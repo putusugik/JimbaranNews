@@ -26,7 +26,7 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
  * Created by User on 7/30/2018.
  */
 
-class JSONParser {
+public class JSONParser {
     static InputStream is = null;
     static JSONObject jObj = null;
     static String json = "";
